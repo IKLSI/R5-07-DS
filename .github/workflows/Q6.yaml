@@ -28,20 +28,21 @@ jobs:
           echo "" >> $FILENAME
           cat Q6.java >> $FILENAME
           echo "" >> $FILENAME
-          echo "Taille du fichier Q6.java :" >> $FILENAME
+          echo "Nombre de lignes dans Q6.java :" >> $FILENAME
           wc -l Q6.java >> $FILENAME
+          echo "Nombre de caractères dans Q6.java :" >> $FILENAME
           wc -c Q6.java >> $FILENAME
           
           echo "Fichier $FILENAME créé avec succès."
 
       - name: Comparer avec le fichier précédent et générer Q6_différences.txt
         run: |
-          DATE_PRECEDENTE=$(date --date="1 day ago" "+%d-%m-%Y-%H%M%S")
-          FILENAME_PRECEDENT="Q6_archive_${DATE_PRECEDENTE}.txt"
-          
-          if [ -f "$FILENAME_PRECEDENT" ]; then
-            echo "Comparaison avec le fichier précédent : $FILENAME_PRECEDENT"
-            diff $FILENAME_PRECEDENT $FILENAME > Q6_différences.txt
+          # Trouver le dernier fichier Q6_archive_ existant (le plus récent)
+          LAST_FILE=$(ls Q6_archive_*.txt | sort -n | tail -n 2 | head -n 1)
+
+          if [ -f "$LAST_FILE" ]; then
+            echo "Comparaison avec le fichier précédent : $LAST_FILE"
+            diff $LAST_FILE $FILENAME > Q6_différences.txt
           else
             echo "Aucun fichier précédent trouvé. Aucun diff effectué." > Q6_différences.txt
           fi
