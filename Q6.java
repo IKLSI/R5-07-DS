@@ -27,4 +27,5 @@ public class Q6
 			System.out.println("Veuillez entrer un nombre valide.");
 		}
 	}
+	// Ajout d'un commentaire pour exercer une modification dans le fichier généré
 }
