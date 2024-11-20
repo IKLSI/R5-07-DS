@@ -36,12 +36,13 @@ jobs:
 
       - name: Comparer avec le fichier précédent et générer Q6_différences.txt
         run: |
-          DATE_PRECEDENTE=$(date --date="1 day ago" "+%d-%m-%Y-%H%M%S")
-          FILENAME_PRECEDENT="Q6_archive_${DATE_PRECEDENTE}.txt"
-          
-          if [ -f "$FILENAME_PRECEDENT" ]; then
-            echo "Comparaison avec le fichier précédent : $FILENAME_PRECEDENT"
-            diff $FILENAME_PRECEDENT $FILENAME > Q6_différences.txt
+          FILES=$(ls Q6_archive_*.txt | sort -n | tail -n 2)
+          FILES_ARRAY=($FILES)
+          if [ ${#FILES_ARRAY[@]} -eq 2 ]; then
+            LAST_FILE=${FILES_ARRAY[0]}
+            PREVIOUS_FILE=${FILES_ARRAY[1]}
+            echo "Comparaison avec le fichier précédent : $PREVIOUS_FILE"
+            diff $PREVIOUS_FILE $LAST_FILE > Q6_différences.txt
           else
             echo "Aucun fichier précédent trouvé. Aucun diff effectué." > Q6_différences.txt
           fi
