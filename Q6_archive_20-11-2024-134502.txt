@@ -1,7 +1,0 @@
-Kyliann LEVESQUE
-
-Suppression du code
-
-Taille du fichier Q6.java :
-30 Q6.java
-506 Q6.java
