@@ -1,0 +1,45 @@
+name: Créer et déposer Q4_archive_date.txt
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  create-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Vérifier le dépôt
+        uses: actions/checkout@v3
+
+      - name: Vérification existence de Q4.java
+        run: |
+          if [ ! -f Q4.java ]; then
+            echo "Erreur : Le fichier Q4.java n'existe pas."
+            exit 1
+          fi
+
+      - name: Création de Q4_archive_date.txt
+        run: |
+          DATE=$(date "+%d-%m-%Y")
+          FILENAME="Q4_archive_${DATE}.txt"
+          echo "Nom et prénom : Kyliann LEVESQUE" > $FILENAME
+          echo "" >> $FILENAME
+          cat Q4.java >> $FILENAME
+          echo "Fichier $FILENAME créé avec succès."
+
+      - name: Configuration Git
+        run: |
+          git config user.name "KLS"
+          git config user.email "kyliannlvs2@gmail.com"
+
+      - name: Commit du fichier
+        run: |
+          DATE=$(date "+%d-%m-%Y")
+          FILENAME="Q4_archive_${DATE}.txt"
+          git add $FILENAME
+          git commit -m "Ajout de $FILENAME"
+
+      - name: Dépôt des modifications
+        run: git push
