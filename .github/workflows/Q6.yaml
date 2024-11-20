@@ -57,7 +57,7 @@ jobs:
 
       - name: Commit des fichiers
         run: |
-          git add $FILENAME Q6_différences.txt
+          git add "Q6_archive_*.txt" "Q6_différences.txt"
           git commit -m "Ajout de $FILENAME"
 
       - name: Dépôt des modifications
