@@ -1,0 +1,40 @@
+name: Créer et déposer Q3_archive_java.txt
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  create-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Vérifier le dépôt
+        uses: actions/checkout@v3
+
+      - name: Vérification existence de Q3.java
+        run: |
+          if [ ! -f Q3.java ]; then
+            echo "Erreur : Le fichier Q3.java n'existe pas."
+            exit 1
+          fi
+
+      - name: Création de Q3_archive_java.txt
+        run: |
+          echo "Nom et prénom : Kyliann LEVESQUE" > Q3_archive_java.txt
+          echo "" >> Q3_archive_java.txt
+          cat Q3.java >> Q3_archive_java.txt
+
+      - name: Configuration Git
+        run: |
+          git config user.name "KLS"
+          git config user.email "kyliannlvs2@gmail.com"
+
+      - name: Commit du fichier
+        run: |
+          git add Q3_archive_java.txt
+          git commit -m "Ajout de Q3_archive_java.txt basé sur Q3.java" || echo "Aucun changement à valider"
+
+      - name: Dépôt des modifications
+        run: git push
