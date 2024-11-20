@@ -1,0 +1,60 @@
+name: Créer et déposer Q6_archive_date.txt
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  create-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Vérifier le dépôt
+        uses: actions/checkout@v3
+
+      - name: Vérification existence de Q6.java
+        run: |
+          if [ ! -f Q6.java ]; then
+            echo "Erreur : Le fichier Q6.java n'existe pas."
+            exit 1
+          fi
+
+      - name: Récupérer la date et créer le fichier Q6_archive_date.txt
+        run: |
+          DATE=$(date "+%d-%m-%Y-%H%M%S")
+          FILENAME="Q6_archive_${DATE}.txt"
+          echo "Kyliann LEVESQUE" > $FILENAME
+          echo "" >> $FILENAME
+          cat Q6.java >> $FILENAME
+          echo "" >> $FILENAME
+          echo "Taille du fichier Q6.java :" >> $FILENAME
+          wc -l Q6.java >> $FILENAME
+          wc -c Q6.java >> $FILENAME
+          
+          echo "Fichier $FILENAME créé avec succès."
+
+      - name: Comparer avec le fichier précédent et générer Q6_différences.txt
+        run: |
+          DATE_PRECEDENTE=$(date --date="1 day ago" "+%d-%m-%Y-%H%M%S")
+          FILENAME_PRECEDENT="Q6_archive_${DATE_PRECEDENTE}.txt"
+          
+          if [ -f "$FILENAME_PRECEDENT" ]; then
+            echo "Comparaison avec le fichier précédent : $FILENAME_PRECEDENT"
+            diff $FILENAME_PRECEDENT $FILENAME > Q6_différences.txt
+          else
+            echo "Aucun fichier précédent trouvé. Aucun diff effectué." > Q6_différences.txt
+          fi
+
+      - name: Configuration Git
+        run: |
+          git config user.name "KLS"
+          git config user.email "kyliannlvs2@gmail.com"
+
+      - name: Commit des fichiers
+        run: |
+          git add $FILENAME Q6_différences.txt
+          git commit -m "Ajout de $FILENAME"
+
+      - name: Dépôt des modifications
+        run: git push
