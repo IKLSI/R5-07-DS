@@ -28,23 +28,26 @@ jobs:
           echo "" >> $FILENAME
           cat Q6.java >> $FILENAME
           echo "" >> $FILENAME
-          echo "Nombre de lignes dans Q6.java :" >> $FILENAME
+          echo "Taille du fichier Q6.java :" >> $FILENAME
           wc -l Q6.java >> $FILENAME
-          echo "Nombre de caractères dans Q6.java :" >> $FILENAME
           wc -c Q6.java >> $FILENAME
           
           echo "Fichier $FILENAME créé avec succès."
 
       - name: Comparer avec le fichier précédent et générer Q6_différences.txt
         run: |
-          # Trouver le dernier fichier Q6_archive_ existant (le plus récent)
-          LAST_FILE=$(ls Q6_archive_*.txt | sort -n | tail -n 2 | head -n 1)
+          # Trouver les deux derniers fichiers Q6_archive_ existants
+          FILES=$(ls Q6_archive_*.txt | sort -n | tail -n 2)
+          FILES_ARRAY=($FILES)
 
-          if [ -f "$LAST_FILE" ]; then
-            echo "Comparaison avec le fichier précédent : $LAST_FILE"
-            diff $LAST_FILE $FILENAME > Q6_différences.txt
+          if [ ${#FILES_ARRAY[@]} -eq 2 ]; then
+            LAST_FILE=${FILES_ARRAY[0]}
+            PREVIOUS_FILE=${FILES_ARRAY[1]}
+
+            echo "Comparaison avec le fichier précédent : $PREVIOUS_FILE"
+            diff $PREVIOUS_FILE $LAST_FILE > Q6_différences.txt
           else
-            echo "Aucun fichier précédent trouvé. Aucun diff effectué." > Q6_différences.txt
+            echo "Moins de 2 fichiers Q6_archive_* trouvés. Aucun diff effectué." > Q6_différences.txt
           fi
 
       - name: Configuration Git
