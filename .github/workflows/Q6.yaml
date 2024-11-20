@@ -61,4 +61,4 @@ jobs:
           git commit -m "Ajout de $FILENAME"
 
       - name: Dépôt des modifications
-        run: git push --force
+        run: git push
