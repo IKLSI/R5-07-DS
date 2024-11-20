@@ -1,0 +1,38 @@
+name: Créer et déposer Q2_archive_README
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  create-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Vérifier le dépôt
+        uses: actions/checkout@v3
+
+      - name: Création de Q2_archive_README.md
+        run: |
+          DATE=$(date "+%Y-%m-%d %H:%M:%S")
+          echo "Nom et prénom : Kyliann Levesque" > Q2_archive_README.md
+          echo "Date et heure d'exécution : $DATE" >> Q2_archive_README.md
+          if [ -f README.md ]; then
+            cat README.md >> Q2_archive_README.md
+          else
+            echo "README.md introuvable." >> Q2_archive_README.md
+          fi
+
+      - name: Configuration Git
+        run: |
+          git config user.name "KLS"
+          git config user.email "kyliannlvs2@gmail.com"
+
+      - name: Commit du fichier
+        run: |
+          git add Q2_archive_README.md
+          git commit -m "Ajout Q2_archive_README.md avec les infos personnelles et README.md"
+
+      - name: Dépôt du fichier
+        run: git push
