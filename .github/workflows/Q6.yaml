@@ -51,10 +51,14 @@ jobs:
           git config user.name "KLS"
           git config user.email "kyliannlvs2@gmail.com"
 
+      - name: Récupérer les dernières modifications du dépôt distant
+        run: |
+          git pull origin main --rebase
+
       - name: Commit des fichiers
         run: |
           git add $FILENAME Q6_différences.txt
           git commit -m "Ajout de $FILENAME"
 
       - name: Dépôt des modifications
-        run: git push
+        run: git push --force
