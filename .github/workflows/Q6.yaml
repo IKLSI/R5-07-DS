@@ -55,10 +55,6 @@ jobs:
           git config user.name "KLS"
           git config user.email "kyliannlvs2@gmail.com"
 
-      - name: Récupérer les dernières modifications du dépôt distant
-        run: |
-          git pull origin main --rebase
-
       - name: Commit des fichiers
         run: |
           git add "Q6_archive_*.txt" "Q6_différences.txt"
