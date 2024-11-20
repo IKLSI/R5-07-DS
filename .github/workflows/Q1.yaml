@@ -1,0 +1,36 @@
+name: Créer et déposer Q1_archive_README
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  create-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Création Q1_archive_README.md
+        run: |
+          if [ -f README.md ]; then
+            cp README.md Q1_archive_README.md
+          else
+            echo "README.md introuvable."
+            exit 1
+          fi
+
+      - name: Configuration Git
+        run: |
+          git config user.name "KLS"
+          git config user.email "kyliannlvs2@gmail.com"
+
+      - name: Commit du nouveau fichier
+        run: |
+          git add Q1_archive_README.md
+          git commit -m "Ajout Q1_archive_README.md  README.md"
+
+      - name: Dépôt du nouveau fichier
+        run: git push
